@@ -1,0 +1,6 @@
+name: GPToolkit
+main: ru.rawcode.gpt.Util
+version: 1.0.0.
+author: RawCode
+website: http://gamepolis.ru/forum/index.php?showforum=129
+description: Utility and research platform, provide option to load nonJARed plugins from arbitrary locations.
