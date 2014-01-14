@@ -120,6 +120,35 @@ public class _Mute implements Listener {
 			Registry.put(Data[1], w);
 			return;
 		}
+		
+		if (Order.equals("mlist"))
+		{
+			PermissionUser user = PermissionsEx.getUser(event.getPlayer());
+			if (!user.has("RawDev.mList")){
+				event.getPlayer().sendMessage(ChatColor.RED + "необходим узел RawDev.mList");
+				return;
+			}
+			
+			if (Registry.isEmpty())
+			{
+				event.getPlayer().sendMessage("Игроков с банчатом нет. Быть может, пора исправить положение?");
+				return;
+			}
+			
+			event.getPlayer().sendMessage("Список банов чата:");
+			for (Map.Entry<String, Wrapper> entry : Registry.entrySet())
+			{
+				StringBuilder sb = new StringBuilder();
+				if (entry.getValue().Options == 1 && user.has("RawDev.mList.fat"))
+				{
+					sb.append(ChatColor.BOLD + "(FAT) ");
+				}
+				sb.append(ChatColor.RED + entry.getKey() + " - " + (entry.getValue().Expiration - System.currentTimeMillis()) / 1000 + " сек. осталось. Выдал "
+				+ entry.getValue().Admin + ": " + entry.getValue().Reason);
+				event.getPlayer().sendMessage(sb.toString());
+			}
+			return;
+		}
 		event.setCancelled(false);
 	}
 	
@@ -159,4 +188,5 @@ public class _Mute implements Listener {
 		+ w.Admin + " по причине " + w.Reason + " осталось " + (w.Expiration - System.currentTimeMillis()) / 1000 + " секунд");
 		event.setCancelled(true); 
 	}
+	
 }
