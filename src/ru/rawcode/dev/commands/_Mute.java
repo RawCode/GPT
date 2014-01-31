@@ -149,6 +149,27 @@ public class _Mute implements Listener {
 			}
 			return;
 		}
+		if (Order.equals("unmute"))
+		{
+			PermissionUser user = PermissionsEx.getUser(event.getPlayer());
+			if (!user.has("RawDev.Mute")){
+				event.getPlayer().sendMessage(ChatColor.RED + "необходим узел RawDev.Mute");
+				return;
+			}
+			
+			if (Registry.containsKey(Data[1].toLowerCase()))
+			{
+				Registry.remove(Data[1].toLowerCase());
+				Player punished = event.getPlayer().getServer().getPlayer(Data[1]);
+				punished.sendMessage(ChatColor.RED + "Блокировка чата снята администратором " + event.getPlayer().getDisplayName() +": " + Data[2]);
+			}
+			else
+			{
+				event.getPlayer().sendMessage(ChatColor.RED + "Опомнись, нет блокировок у пользователя " + Data[1].toLowerCase() + "!");
+			}
+			
+			return;
+		}
 		event.setCancelled(false);
 	}
 	
