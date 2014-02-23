@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import rc.gpt.auto.AutoSave;
 import rc.gpt.wgen.Generator_DFS;
 import rc.ubt.UnsafeImpl;
 
@@ -48,11 +49,13 @@ public class Loader extends JavaPlugin implements Listener
     public void onEnable() 
     {
     	Notify(this);
+    	new AutoSave();
     	//Notify something
     }
     
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
     	LogManager.getLogger().info("Dome Fuji Survival generator will be used for " + worldName);
+    	//Bukkit.getWorld("world").set
         return new Generator_DFS();
     }
 }
