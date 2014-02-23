@@ -1,7 +1,5 @@
 package rc.gpt.wgen;
 
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -66,8 +64,12 @@ public class Generator_DFS extends ChunkGenerator {
 		for (int lx = 0 ; lx < 16 ; lx++){
 			for (int lz = 0 ; lz < 16 ; lz++){
 				heightmap[lx][lz] = SimplexImpl.noise((x*16+lx)*SCALE, (z*16+lz)*SCALE);
-				if (heightmap[lx][lz] >= BASE+STEP*2){
+				if (heightmap[lx][lz] >= BASE+STEP*4){
 					biomes.setBiome(lx, lz, Biome.JUNGLE);
+					continue;
+				}
+				if (heightmap[lx][lz] >= BASE+STEP*2){
+					biomes.setBiome(lx, lz, Biome.JUNGLE_HILLS);
 					continue;
 				}
 				if (heightmap[lx][lz] >= BASE+STEP*1){
@@ -95,6 +97,10 @@ public class Generator_DFS extends ChunkGenerator {
 		//sector 2
 		AddLayer(output[2],0,15,1); //whis will be shroom cave level
 		
+		//shroom caves is secon step generation
+		//i will remove stone and add mycelium based of noise value
+		//after generation shape finished it will be optimized by merging with initial filling
+		
 		//sector 3
 		AddLayer(output[3],0,11,1);
 		
@@ -103,6 +109,8 @@ public class Generator_DFS extends ChunkGenerator {
 			
 			int ordinates = i % 256;
 			output[3][i] = SURFACE_OUTSIDE;
+			if (biomes.getBiome(ordinates % 16, ordinates / 16) == Biome.JUNGLE_HILLS)
+				output[3][i] = (i / 256 == 15) ? SURFACE_INSIDE_TOP : SURFACE_INSIDE ;
 			if (biomes.getBiome(ordinates % 16, ordinates / 16) == Biome.JUNGLE)
 				output[3][i] = (i / 256 == 15) ? SURFACE_INSIDE_TOP : SURFACE_INSIDE ;
 			if (biomes.getBiome(ordinates % 16, ordinates / 16) == Biome.BIRCH_FOREST)

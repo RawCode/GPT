@@ -6,12 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,9 +18,9 @@ public class Loader extends JavaPlugin implements Listener
 	
 	//This method is constructor hijack, it will set static variable to latest constructed object of this type;
 	//You expected to never construct multiple instances of this class at same time;
-	static JavaPlugin 	INSTANCE4444 = null;
+	public static JavaPlugin 	INSTANCE = null;
 	{
-		INSTANCEfffff = this;
+		INSTANCE = this;
 	}
 	
 	//this method is class constructor hijack, it executed at moment of class initialization (once in most cases);

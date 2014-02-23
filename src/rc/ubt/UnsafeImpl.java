@@ -1,6 +1,10 @@
 package rc.ubt;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import sun.misc.Unsafe;
@@ -97,11 +101,13 @@ public class UnsafeImpl //JAVA process IO
 	}
 	
 	static private void forObject_Dump(Object O){
-        for (int i = 0; i < 256; i++){
-            if (i % 4 == 0)
-            	System.out.println();
+		System.out.println("Trace of " + Long.toHexString(I2L(forObject_OOP(O))));
+        for (int i = 0; i < 72; i++){
             	System.out.print(String.format("%02X ", unsafe.getByte(O,(long)i)));
+            	if (i % 4 == 3)
+            		System.out.println();
         }
+        System.out.println();
 	}
 	
 	//I need complex all in one with caching and other stuff method backed by hashtable or something similar
@@ -111,10 +117,56 @@ public class UnsafeImpl //JAVA process IO
 	
 	
 	
-	
+	//integer have 4 words size
+	//string have 6 words size
 	
 	
 	static public void main(String[] args) throws Throwable {
+		
+		Object S1 = new Integer(0xAAAAAAAA);
+		Object S2 = new String("");
+		
+		//forObject_Dump(S1);
+		//forObject_Dump(S2);
+		
+		int C1 = unsafe.getInt(S1, 8);
+		int C2 = unsafe.getInt(S2, 8);
+		
+		forObject_Dump(forOOP_Object(C1));
+		forObject_Dump(forOOP_Object(C2));
+		
+		int X1 = unsafe.getInt(forOOP_Object(C1), 24); //this is layout helper OOP instance
+		int X2 = unsafe.getInt(forOOP_Object(C2), 24);
+		
+		System.out.println(X1);
+		System.out.println(X2);
+		
+		//forObject_Dump(forOOP_Object(X1));
+		//forObject_Dump(forOOP_Object(X2));
+		
+		//int tt = unsafe.getInt(subject, 8);
+		//System.out.println(Long.toHexString(I2L(tt)));
+		//forObject_Dump(forOOP_Object(tt));
+		//forObject_Dump(forObject_OOP(tt));
+		/*
+		Path path = Paths.get("d://1.class");
+		byte[] data = Files.readAllBytes(path);
+		
+		for (byte b : data)
+			System.out.println(b);
+		
+	    Path pathd = Paths.get("d://bt.txt");
+	    Files.write(pathd, data); //creates, overwrites
+	    
+	    //string representation of byte
+	    //casting byte to it's char will be implemented via replacement table
+	    /*
+	    challenge eh?
+	    		looks like you accept entries about "let i merge everything into single line", i will provide ultimate entry with this "feature".
+
+	    		1) I will pick very first entry of this thread - class "Give"
+	    		2) I will precompile it
+	    		3) With little suplementary class i will assemble byte array storage from given class
 		
 		/*
 		B test = new B();

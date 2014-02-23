@@ -1,2 +1,6 @@
-/Loader.class
-/Main.class
+/JAR
+/.settings
+/.classpath
+/.project
+.gitignore
+/.gitignore

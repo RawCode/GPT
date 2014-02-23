@@ -16,32 +16,30 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class _PvP implements Listener {
+	public _PvP(){};
 	
-	static long EPOCH_TIME_OFFSET = System.currentTimeMillis();
-	static HashMap<String,_PvP_Wrapper> HASH_STORAGE = new HashMap<String,_PvP_Wrapper>();
-	static byte GC_EVENT = 100;
-	static int COUNTDOWN = 10000;
+	static HashMap<String,_PvP> HASH_STORAGE = new HashMap<String,_PvP>();
+	static byte DOCOLLECT = 127;
+	static int  COUNTDOWN = 10000;
 	
-	static class _PvP_Wrapper
-	{
-		public int TimeStamp;
-		public String Source;
-		
-		public _PvP_Wrapper(int i, String s){
-			TimeStamp = i;
-			Source = s;
-		}
-	}
+	
+	
+	public long TimeStamp;
+	public String Source;
+	
+	
+	
+	public _PvP(long Offset,String Source){
+		this.TimeStamp = Offset;
+		this.Source = Source;};
 	
 	static void PERFORM_GC_EVENT(){
-		int TimeOffset = (int)(System.currentTimeMillis() - EPOCH_TIME_OFFSET);
-		Iterator<_PvP_Wrapper> Source = HASH_STORAGE.values().iterator();
-		
-		int LocalTime = 0;
+		DOCOLLECT = 127;
+		Iterator<_PvP> Source = HASH_STORAGE.values().iterator();
+		long TIME = System.currentTimeMillis();
 		while (Source.hasNext())
 		{
-			LocalTime = Source.next().TimeStamp;
-			if (TimeOffset - LocalTime >= COUNTDOWN){
+			if (TIME - Source.next().TimeStamp >= COUNTDOWN){
 				Source.remove();
 			}
 		}
@@ -55,33 +53,33 @@ public class _PvP implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
+	public void onPlayerDeathEvent(PlayerDeathEvent event){
+		String Name = event.getEntity().getName();
+		if (Bukkit.getPlayer(Name) != null)
+			HASH_STORAGE.remove(Name);
+		//To prevent doublekilling and inability to use commands after legit death
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
 	public void onPlayerQuitEvent(PlayerQuitEvent event) {
 		String Key = event.getPlayer().getName().toLowerCase();
-		_PvP_Wrapper Container = HASH_STORAGE.get(Key);
-		
-		int TimeOffset = (int)(System.currentTimeMillis() - EPOCH_TIME_OFFSET);
+		_PvP Container = HASH_STORAGE.get(Key);
 		if (Container == null) return;
+		long TIME = System.currentTimeMillis();
 		
-		if (TimeOffset - Container.TimeStamp <= COUNTDOWN){
-			event.getPlayer().damage(19);
+		if (TIME - Container.TimeStamp <= COUNTDOWN){
+			event.getPlayer().damage(19d);
 			Bukkit.broadcastMessage(ChatColor.RED + event.getPlayer().getDisplayName() + 
 			" покинул игру во время боя с " + Container.Source + " и был наказан!");
-			HASH_STORAGE.remove(Key);
 		}
-	}
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled = true)
-	public void onPlayerDeathEvent(PlayerDeathEvent event) {
-		String Key = event.getEntity().getName().toLowerCase();
 		HASH_STORAGE.remove(Key);
 	}
-	
-	
+
 	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled = true)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 		if (!event.getPlayer().isDead())return;
 		String Key = event.getPlayer().getName().toLowerCase();
-		_PvP_Wrapper Container = HASH_STORAGE.get(Key);
-		
+		_PvP Container = HASH_STORAGE.get(Key);
 		if (Container == null) return;
 		
 		event.setJoinMessage(ChatColor.RED + event.getPlayer().getDisplayName() + 
@@ -94,15 +92,14 @@ public class _PvP implements Listener {
 	{
 		
 		String Key = event.getPlayer().getName().toLowerCase();
-		_PvP_Wrapper Container = HASH_STORAGE.get(Key);
+		_PvP Container = HASH_STORAGE.get(Key);
 		if (Container == null) return;
+		long TIME = System.currentTimeMillis();
 		
-		int TimeOffset = (int)(System.currentTimeMillis() - EPOCH_TIME_OFFSET);
-		
-		if (TimeOffset - Container.TimeStamp <= COUNTDOWN) 
+		if (TIME - Container.TimeStamp <= COUNTDOWN) 
 		{
 			event.getPlayer().sendMessage(ChatColor.RED + 
-					"You cannot use any commands when fighting with " + Container.Source);
+					"Нельзя использовать команды во время боя с " + Container.Source);
 			event.setCancelled(true);
 			return;
 		}
@@ -119,10 +116,11 @@ public class _PvP implements Listener {
 		}
 		
 		String Key = ((Player) event.getEntity()).getName().toLowerCase();
-		int TimeOffset = (int)(System.currentTimeMillis() - EPOCH_TIME_OFFSET);
+		long TIME = System.currentTimeMillis();
+		HASH_STORAGE.put(Key,new _PvP(TIME,((Player) event.getDamager()).getDisplayName()));
 		
-		HASH_STORAGE.put(Key,new _PvP_Wrapper(TimeOffset,((Player) event.getDamager()).getDisplayName()));
-
-		if (GC_EVENT-- == 0)PERFORM_GC_EVENT();
+		DOCOLLECT--;
+		if (DOCOLLECT == 0)
+			PERFORM_GC_EVENT();
 	}
 }

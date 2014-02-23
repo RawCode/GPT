@@ -1,11 +1,18 @@
 package rc.gpt;
 
+import java.io.IOException;
+
 public class Main
 {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//child subprocess code will be here
+	public static void main(String... args) throws IOException, InterruptedException 
+	{
+		//Process proc = Runtime.getRuntime().exec("java -jar d://1.jar");
+		//Runtime.getRuntime().exit(0);
+		//actually everything very simple, we need to execute our jar, then our jar will execute server
+		//only issue with server window, but this can be fixed by invoking gated CMDs or some other hack
+		//this will work with special classloader and console hijack
+		//console hijack probably will be implemented via passing descriptors into new process
 	}
 
 }
