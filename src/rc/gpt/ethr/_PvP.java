@@ -22,12 +22,8 @@ public class _PvP implements Listener {
 	static byte DOCOLLECT = 127;
 	static int  COUNTDOWN = 10000;
 	
-	
-	
 	public long TimeStamp;
 	public String Source;
-	
-	
 	
 	public _PvP(long Offset,String Source){
 		this.TimeStamp = Offset;

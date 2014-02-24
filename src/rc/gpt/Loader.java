@@ -35,10 +35,10 @@ public class Loader extends JavaPlugin implements Listener
 		//it does not load classes from folder currently, this is TBI feature for fast debug deployment;
 		
 		//world generator hijack
-		YamlConfiguration YC = (YamlConfiguration) UnsafeImpl.getObject(Bukkit.getServer(), "configuration");
-		ConfigurationSection ss = YC.createSection("worlds");
-		ss = ss.createSection("world");
-		ss.set("generator", "GPToolkit");
+		//YamlConfiguration YC = (YamlConfiguration) UnsafeImpl.getObject(Bukkit.getServer(), "configuration");
+		//ConfigurationSection ss = YC.createSection("worlds");
+		//ss = ss.createSection("world");
+		//ss.set("generator", "GPToolkit");
 	}
 	
 	static void Notify(Listener L)
@@ -48,7 +48,7 @@ public class Loader extends JavaPlugin implements Listener
 
     public void onEnable() 
     {
-    	Notify(this);
+    	//Notify(this);
     	new AutoSave();
     	//Notify something
     }

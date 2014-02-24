@@ -123,6 +123,19 @@ public class UnsafeImpl //JAVA process IO
 	
 	static public void main(String[] args) throws Throwable {
 		
+		int[] data = {1,2,3};
+		int S = 0;
+		
+		while(true)
+		{
+			System.out.println(data[S]);
+			if (S++ == data.length-1)
+				return;
+		}
+		
+		
+		
+		/*
 		Object S1 = new Integer(0xAAAAAAAA);
 		Object S2 = new String("");
 		
