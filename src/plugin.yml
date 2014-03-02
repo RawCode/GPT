@@ -1,7 +1,6 @@
-name: GPToolkit
-main: rc.gpt.Loader
-version: 1.0.0
+name: UBT
+main: rc.ubt.Loader
+version: 0
 author: RawCode
-website: http://gamepolis.ru/forum/index.php?showforum=129
-description: Custom classloader wrapper and utils for bukkit 172
-load: startup
+website: https://github.com/RawCode/UBT
+description: Research and development plugin about random hacks

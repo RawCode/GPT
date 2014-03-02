@@ -1,4 +1,4 @@
-package rc.gpt.wgen;
+package rc.ubt.wgen;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
-import rc.ubt.SimplexImpl;
+import rc.ubt.impl.SimplexImpl;
 
 public class Generator_DFS extends ChunkGenerator {
 	

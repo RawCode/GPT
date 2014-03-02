@@ -1,4 +1,4 @@
-package rc.gpt.bcmn;
+package rc.ubt.nmsm;
 //base class modification
 import net.minecraft.server.v1_7_R1.Block;
 import net.minecraft.server.v1_7_R1.Material;

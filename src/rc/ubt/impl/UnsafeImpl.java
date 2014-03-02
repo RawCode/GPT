@@ -1,4 +1,4 @@
-package rc.ubt;
+package rc.ubt.impl;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
+
+import org.bukkit.Bukkit;
 
 import sun.misc.Unsafe;
 import sun.reflect.Reflection;
@@ -22,7 +24,7 @@ public class UnsafeImpl //JAVA process IO
 	
 	//Tested platform Windows 7 - x64 - CompressedOOPS
 	//Profiles for other platforms TBI.
-
+	static String VERSION = Bukkit.getServer().getClass().getName().split("\\.")[3];
 	//markers for field size detection feature (TBI)
 	static int FA = 0x0000BEEF;
 	static int FB = 0xDEAD0000;
@@ -80,8 +82,9 @@ public class UnsafeImpl //JAVA process IO
 		return null;
 	}
 	
-	static private void putObject(Object Owner, Field Target, Object Value)
+	static private void putObject(Object Owner, Object Value,String... Names)
 	{
+		Field Target = fetchField(Owner.getClass(),Names);
 		if ((Target.getModifiers() & 8) == 0)
 		{
 			unsafe.putObject(Owner,unsafe.objectFieldOffset(Target),Value);
@@ -119,7 +122,7 @@ public class UnsafeImpl //JAVA process IO
 	
 	//integer have 4 words size
 	//string have 6 words size
-	
+	//final File f = new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 	
 	static public void main(String[] args) throws Throwable {
 		

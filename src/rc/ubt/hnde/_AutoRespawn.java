@@ -1,8 +1,9 @@
-package rc.gpt.ethr;
+package rc.ubt.hnde;
 //event handler
 import net.minecraft.server.v1_7_R1.EntityPlayer;
 import net.minecraft.server.v1_7_R1.MinecraftServer;
 import net.minecraft.server.v1_7_R1.PlayerConnection;
+
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
@@ -13,13 +14,12 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import rc.gpt.Loader;
+import rc.ubt.Loader;
 
 public class _AutoRespawn implements Listener,Runnable {
 	public _AutoRespawn(){}
 	
 	public String target;
-	
 	public _AutoRespawn(String e)
 	{
 		this.target = e;

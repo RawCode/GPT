@@ -1,4 +1,4 @@
-package rc.gpt.ethr;
+package rc.ubt.hnde;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,7 +65,7 @@ public class _PvP implements Listener {
 		
 		if (TIME - Container.TimeStamp <= COUNTDOWN){
 			event.getPlayer().damage(19d);
-			Bukkit.broadcastMessage(ChatColor.RED + event.getPlayer().getDisplayName() + 
+			Bukkit.broadcastMessage("AVZX" + ChatColor.RED + event.getPlayer().getDisplayName() + 
 			" покинул игру во время боя с " + Container.Source + " и был наказан!");
 		}
 		HASH_STORAGE.remove(Key);

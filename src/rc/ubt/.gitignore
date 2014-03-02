@@ -1,5 +1,3 @@
-/ClassLoaderImpl.class
-/MojangImpl.class
-/SimplexImpl.class
-/ThreadImpl.class
-/UnsafeImpl.class
+/Loader.class
+/Starter.class
+/Tester.class

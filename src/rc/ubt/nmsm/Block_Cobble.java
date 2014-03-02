@@ -1,4 +1,4 @@
-package rc.gpt.bcmn;
+package rc.ubt.nmsm;
 
 import java.util.Random;
 

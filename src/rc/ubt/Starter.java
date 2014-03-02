@@ -1,11 +1,8 @@
-package rc.gpt;
+package rc.ubt;
 
-import java.io.IOException;
-
-public class Main
+public class Starter
 {
-
-	public static void main(String... args) throws IOException, InterruptedException 
+	public static void main(String... args) throws Throwable
 	{
 		//Process proc = Runtime.getRuntime().exec("java -jar d://1.jar");
 		//Runtime.getRuntime().exit(0);
@@ -14,5 +11,4 @@ public class Main
 		//this will work with special classloader and console hijack
 		//console hijack probably will be implemented via passing descriptors into new process
 	}
-
 }
