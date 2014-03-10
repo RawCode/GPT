@@ -5,6 +5,10 @@ import net.minecraft.server.v1_7_R1.Material;
 
 public class Block_Base extends Block {
 	
+	//must update names and methods to follow latest bukkit r04
+	
+	
+	
 	public Block_Base(Material material) {
         super(material);
     }

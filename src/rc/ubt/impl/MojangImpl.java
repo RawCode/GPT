@@ -10,6 +10,13 @@ import java.net.URL;
 public class MojangImpl
 {
 	
+	//this is support class
+	//it expected to perform mojang request in async\querry
+	//storing inside concurrent hashmap (check implementation in java or desktop)
+	//and givin results at later time
+	//results will require manual GC over time
+	
+	
 	static byte[] requestdataA = "[{\"name\":\"".getBytes();
 	static byte[] requestdataB = "\",\"agent\":\"minecraft\"}]".getBytes();
 	static byte[] name = "RawCode".getBytes();

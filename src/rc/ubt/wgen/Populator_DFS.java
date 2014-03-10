@@ -14,6 +14,8 @@ import rc.ubt.impl.SimplexImpl;
 
 public class Populator_DFS extends BlockPopulator 
 {
+	//generic howto refactoring required.
+	
 	static final double SCALE = 0.0625d;
 	static final Random RND   = new Random(0);
 	

@@ -17,6 +17,20 @@ public class Generator_DFS extends ChunkGenerator {
 	//Dome Fuji Survival
 	//Hardcoded defaults
 	
+	//minor refactoring to get rid off too hardcoded stuff is required
+	//shrom caves are required
+	//world seed is required
+	//or distribution must be altered
+	
+	//there is no answer about how minecraft generate ores and other stuff without invoking populators recursively
+	//some method must allow to change world ignoring chunk borders
+	//and not falling into stackoverflow
+	
+	//probably it's flaw inside standart bukkit implementation of custom generators
+	//to invoke populator over chunk not having borders available
+	//or to populate chunk and load objects if some required to chunk is set
+	//in any case must study carefully how chunk generated and populated and what may cause chunk to load and generate
+	
 	static final double SCALE = 0.00390625d; //DONT
 	static final double BASE  = 0.67d; //minimal noise for dome
 	static final double STEP  = 0.05d; //noise step for dome

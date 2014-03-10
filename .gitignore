@@ -1,1 +1,12 @@
+/.git
+/.settings
+*.classpath
+*.project
+*.class
+*.jar
+.gitignore
+gitignore
+~.gitignore
+/.gitignore
+*.gitignore
 /JAR

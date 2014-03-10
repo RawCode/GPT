@@ -18,6 +18,23 @@ import sun.reflect.Reflection;
 @SuppressWarnings("all")
 public class UnsafeImpl //JAVA process IO
 {
+	
+	//large part of work for fields and methods ahead
+	//jilegal will help (probably)
+	//major refactoring required to allow simple and effective syntax
+	
+	//probably simething with push\pull threadlocal or similar to allow index
+	
+	//link to field
+	//field.set \ field.get
+	//field update
+	
+	//or atomic methods about just setting field or just getting field
+	//or getting and setting field in single run if some property of object need to change
+	//or object needed only to get other object
+	
+	
+	
 	//Reflections are just one big wrapped over Unsafe
 	//Java objects are wrappers over JVM OOPs
 	//Now you know everything required to work with this code

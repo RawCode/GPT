@@ -17,6 +17,11 @@ import org.bukkit.scheduler.BukkitScheduler;
 import rc.ubt.Loader;
 
 public class _AutoRespawn implements Listener,Runnable {
+	
+	//autorespawn working without issues at this moment
+	//there is nothing do do beyound few changes to reflections\inport
+	//but this first require work on unsafeimpl
+	
 	public _AutoRespawn(){}
 	
 	public String target;

@@ -2,6 +2,19 @@ package rc.ubt.impl;
 
 public class SimplexImpl
 {
+	
+	//simplex implementation require option to define seed, since currently seed is fixed and
+	//cannot be changed at all
+	//reallocations are joke
+	//best way to define p[] by method that ensure all values from 0x00 to 0xFF placed in random order
+	//best way to implement this is pseudorandom index with uniform distribution at given range (without chance
+	//to link multiple times to same index
+	//pool of values
+	//starting seed
+	
+	//also valid method to make things fast is static analisis of how bytes are actually allocated
+	//probably full range can be defined in alternative way without just storing integers around
+	
 
 	static final double F2 = 0.5*(Math.sqrt(3.0)-1.0);
 	static final double G2 = (3.0-Math.sqrt(3.0))/6.0;

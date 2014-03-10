@@ -77,6 +77,19 @@ public class Loader extends JavaPlugin
 	
     public void onEnable()
     {
+    	//due loading rules, i need both preworld and post world onEnable
+    	//callback
+    	//must check how to implement such feature
+    	
+    	//probably i will need to encapsulate multiple plugins inside single jar container
+    	//this is possible to implement with modded classloader
+    	
+    	
+    	
+    	
+    	
+    	
+    	
     	//Bukkit.getPluginManager().registerEvents(this, this);
     	//Notify(this);
     	//new AutoSave();

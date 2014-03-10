@@ -13,6 +13,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class _Mute implements Listener {
+	
+	//modular design require improving and refactoring
+	//probably mute will be merged with something and form something like Censor or similar plugin
+	//with large array of features
+	
+	//i already can see list of forbidden words and infractions on users
+	
 
 	static Map<String,Wrapper> Registry = new HashMap<String,Wrapper>();
 	static WeakHashMap<Player,String> Chat = new WeakHashMap<Player,String>();
