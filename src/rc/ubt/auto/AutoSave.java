@@ -2,8 +2,11 @@ package rc.ubt.auto;
 
 import java.io.UnsupportedEncodingException;
 
+import net.minecraft.server.v1_7_R1.WorldServer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_7_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
@@ -13,6 +16,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import rc.ubt.Loader;
+import rc.ubt.impl.PsExImpl;
 
 public class AutoSave implements Runnable, Listener
 {
@@ -23,6 +27,7 @@ public class AutoSave implements Runnable, Listener
 	static int     STEP       = 0;
 	static boolean DISABLED   = false;
 	static long    SAVECOUNT  = 0;
+	static int     SKIP       = 0;
 	
 	static Chunk TESTAZ = null;
 	
@@ -42,7 +47,7 @@ public class AutoSave implements Runnable, Listener
 		if (Data.length == 0) return;
 		String Order = Data[0].substring(1);
 		
-		if (Order.equals("ztsm"))
+		if (Order.equals("cstoggle") && PsExImpl.has(event.getPlayer(),"UBT.Bypass"))
 		{
 			if (DISABLED)
 			{
@@ -56,10 +61,10 @@ public class AutoSave implements Runnable, Listener
 				TOSAVE = null;
 			}
 			DISABLED = !DISABLED;
-			event.getPlayer().sendMessage("SAVE STATE IS " + DISABLED);
+			event.getPlayer().sendMessage("IS SAVING DISABLED " + DISABLED);
 			event.setCancelled(true);
 		}
-		if (Order.equals("zfsm"))
+		if (Order.equals("csforce") && PsExImpl.has(event.getPlayer(),"UBT.Bypass"))
 		{
 			//restart saving if needed.
 			DISABLED = false;
@@ -91,16 +96,25 @@ public class AutoSave implements Runnable, Listener
 		
 		if (PROCESS)
 		{
-((CraftWorld)Bukkit.getWorld("world")).getHandle().chunkProviderServer.saveChunk(TOSAVE[STEP].getHandle());
-			TOSAVE[STEP] = null;
+			WorldServer w = ((CraftWorld)Bukkit.getWorld("world")).getHandle();
+			for(;;)
+			{
+				if (TOSAVE[STEP].isLoaded())
+				{
+					w.chunkProviderServer.saveChunk(TOSAVE[STEP].getHandle());
+					TOSAVE[STEP] = null;
+					break;
+				}
+				if (STEP++ == TOSAVE.length-1) break;
+				SKIP++;
+			}
 			if (STEP++ == TOSAVE.length-1)
 			{
 				PROCESS = false;
 				LAST_SAVE = System.currentTimeMillis();
 				Bukkit.savePlayers();
 				TOSAVE = null;
-				Bukkit.broadcastMessage("AVZX SAVE PROCESS FINISHED " + System.currentTimeMillis()/1000);
-				Bukkit.broadcastMessage("SAVED " + STEP + " CHUNKS");
+				Bukkit.broadcastMessage("SAVED " + (STEP-SKIP) + " SKIPPED " + SKIP);
 				Bukkit.broadcastMessage("PASSED " + (System.currentTimeMillis() - SAVECOUNT)/1000 + " SECONDS");
 			}
 			return;
@@ -111,10 +125,10 @@ public class AutoSave implements Runnable, Listener
 			PROCESS = true;
 			TOSAVE = (CraftChunk[]) Bukkit.getWorld("world").getLoadedChunks();
 			STEP = 0;
+			SKIP = 0;
 			SAVECOUNT = System.currentTimeMillis();
-			Bukkit.broadcastMessage("AVZX SAVE PROCESS STARTED " + SAVECOUNT/1000);
-			Bukkit.broadcastMessage("WILL SAVE " + TOSAVE.length + " CHUNKS");
-			Bukkit.broadcastMessage("ESTIMATED TIME " + TOSAVE.length/20 + " SECONDS");
+			Bukkit.broadcastMessage("EXPECTED " + TOSAVE.length + " CHUNKS");
+			Bukkit.broadcastMessage("EXPECTED TIME " + TOSAVE.length/20 + " SECONDS");
 		}
 		
 	}

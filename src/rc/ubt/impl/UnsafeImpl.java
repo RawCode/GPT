@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
+import java.util.concurrent.locks.LockSupport;
 
 import org.bukkit.Bukkit;
 
@@ -18,7 +19,7 @@ import sun.reflect.Reflection;
 @SuppressWarnings("all")
 public class UnsafeImpl //JAVA process IO
 {
-	
+	//static String VERSION = Bukkit.getServer().getClass().getName().split("\\.")[3];
 	//large part of work for fields and methods ahead
 	//jilegal will help (probably)
 	//major refactoring required to allow simple and effective syntax
@@ -41,7 +42,7 @@ public class UnsafeImpl //JAVA process IO
 	
 	//Tested platform Windows 7 - x64 - CompressedOOPS
 	//Profiles for other platforms TBI.
-	static String VERSION = Bukkit.getServer().getClass().getName().split("\\.")[3];
+	
 	//markers for field size detection feature (TBI)
 	static int FA = 0x0000BEEF;
 	static int FB = 0xDEAD0000;
@@ -135,25 +136,50 @@ public class UnsafeImpl //JAVA process IO
 	//since memory and calculations footprint not soo heavy, i will need to benchmark hashtable backed version
 	//probably it will be faster to just reseak, then asking hashtable about values
 	
-	
-	
 	//integer have 4 words size
 	//string have 6 words size
 	//final File f = new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 	
 	static public void main(String[] args) throws Throwable {
-		
-		int[] data = {1,2,3};
-		int S = 0;
-		
-		while(true)
+
+		int[] t = {1,2,3,4};
+		int step = 0;
+		for(;;)
 		{
-			System.out.println(data[S]);
-			if (S++ == data.length-1)
-				return;
+			if (t[step] != 3)
+				System.out.println(t[step]);
+			
+			if (step++ == t.length-1)break;
 		}
+		/*
+		final Thread a = new Thread(){
+			public void run(){
+				while(true)
+				{
+					unsafe.monitorEnter(lock);
+					AsyncField++;
+					unsafe.monitorExit(lock);
+					//you insert conditional parking into sections of code that
+					//may cause issues with other concurrent code
+				}
+			}
+		};
 		
+		final Thread b = new Thread(){
+			public void run(){
+				while(true)
+				{
+					unsafe.monitorEnter(lock);
+					System.out.println(AsyncField);
+					System.out.println(AsyncField);
+					unsafe.monitorExit(lock);
+					try{Thread.sleep(1000);}catch(Exception e){};
+				}
+			}
+		};
 		
+		a.start();
+		b.start();
 		
 		/*
 		Object S1 = new Integer(0xAAAAAAAA);

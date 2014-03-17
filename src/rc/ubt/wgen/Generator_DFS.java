@@ -42,6 +42,7 @@ public class Generator_DFS extends ChunkGenerator {
 	
 	//TODO:
 	//asferical nonflat dome fill with less to no dirt on edges and more dirt in middle
+	//OK for NOW
 	
 	public void AddLayer(short[] E,int Start,int End,int ID)
 	{

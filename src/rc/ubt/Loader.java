@@ -18,6 +18,11 @@ import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import rc.ubt.auto.AutoSave;
+import rc.ubt.hnde.CustomLogin;
+import rc.ubt.hnde.ForcedPvP;
+import rc.ubt.hnde.ForcedRespawn;
+import rc.ubt.impl.PsExImpl;
 import rc.ubt.impl.UnsafeImpl;
 import rc.ubt.wgen.Generator_DFS;
 
@@ -77,17 +82,17 @@ public class Loader extends JavaPlugin
 	
     public void onEnable()
     {
+    	PsExImpl.init();
+    	new AutoSave();
+    	Bukkit.getPluginManager().registerEvents(new CustomLogin(), this);
+    	Bukkit.getPluginManager().registerEvents(new ForcedPvP(), this);
+    	Bukkit.getPluginManager().registerEvents(new ForcedRespawn(), this);
     	//due loading rules, i need both preworld and post world onEnable
     	//callback
     	//must check how to implement such feature
     	
     	//probably i will need to encapsulate multiple plugins inside single jar container
     	//this is possible to implement with modded classloader
-    	
-    	
-    	
-    	
-    	444
     	
     	
     	//Bukkit.getPluginManager().registerEvents(this, this);

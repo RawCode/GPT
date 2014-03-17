@@ -23,100 +23,7 @@ public class Populator_DFS extends BlockPopulator
     {
         return par0 >= 0 ? par0 : -par0;
     }
-	
-	public void SpawnSpike(World w, int X, int Z) {
-		{
-			if (w.getBiome(X, Z) != Biome.ICE_PLAINS_SPIKES)
-				return;
-			if (RND.nextInt(30) != 0)
-				return;
-			
-			int par4 = RND.nextInt(4) + 64;
-			int var6 = RND.nextInt(4) + 7;
-			int var7 = var6 / 4 + RND.nextInt(2);
 
-			int var8;
-			int var10;
-			int var11;
-
-			for (var8 = 0; var8 < var6; ++var8)
-			{
-				float var9 = (1.0F - (float) var8 / (float) var6) * (float) var7;
-				var10 = fastfloor(var9);
-
-				for (var11 = -var10; var11 <= var10; ++var11)
-				{
-					float var12 = (float) abs_int(var11) - 0.25F;
-
-					for (int var13 = -var10; var13 <= var10; ++var13)
-					{
-						float var14 = (float) abs_int(var13) - 0.25F;
-
-						if ((var11 == 0 && var13 == 0 || var12 * var12 + var14 * var14 <= var9 * var9)
-								&& (var11 != -var10 && var11 != var10 && var13 != -var10 && var13 != var10 || RND
-										.nextFloat() <= 0.75F))
-						{
-							w.getBlockAt(X + var11, par4 + var8, Z + var13).setType(Material.PACKED_ICE);
-							if (var8 != 0 && var10 > 1)
-							{
-								w.getBlockAt(X + var11, par4 - var8, Z + var13).setType(Material.PACKED_ICE);
-							}
-						}
-					}
-				}
-			}
-
-			var8 = var7 - 1;
-
-			if (var8 < 0)
-			{
-				var8 = 0;
-			} else if (var8 > 1)
-			{
-				var8 = 1;
-			}
-
-			for (int var16 = -var8; var16 <= var8; ++var16)
-			{
-				var10 = -var8;
-
-				while (var10 <= var8)
-				{
-					var11 = par4 - 1;
-					int var17 = 50;
-
-					if (Math.abs(var16) == 1 && Math.abs(var10) == 1)
-					{
-						var17 = RND.nextInt(5);
-					}
-
-					while (true)
-					{
-						if (var11 > 50)
-						{
-							w.getBlockAt(X + var16, var11, Z + var10).setType(Material.PACKED_ICE);
-							--var11;
-							--var17;
-
-							if (var17 <= 0)
-							{
-								var11 -= RND.nextInt(5) + 1;
-								var17 = RND.nextInt(5);
-							}
-
-							continue;
-						}
-
-						++var10;
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	
-	
 	public void SpawnShrub(World w, int X, int Z){
 		if (w.getBiome(X, Z) != Biome.JUNGLE)
 			return;
@@ -265,7 +172,6 @@ public class Populator_DFS extends BlockPopulator
     	for (int p = 16 ; p > 0 ; p--)
     	{
     		SpawnShrub(w,X+RND.nextInt(16),Z+RND.nextInt(16));
-    		SpawnSpike(w,X+RND.nextInt(16),Z+RND.nextInt(16));
     	}
     	X += 2;
     	Z += 2;
