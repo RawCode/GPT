@@ -67,6 +67,8 @@ public class Loader extends JavaPlugin
 		}
 		
 		Bukkit.getPluginManager().enablePlugin(this);
+		//anyway i need method to properly handle postworld and preworld
+		//most effective way to leave plugin startup mode and perform stuff on worldinit event, this is best move
 	}
 	
 	static void Load(File Target)
@@ -78,6 +80,13 @@ public class Loader extends JavaPlugin
 	static void Load(Class Target)
 	{
 		//module loading dont need any checks
+		
+		//probably i just need to register plugin two times of ever two separate classes
+		//this will allow to handle preworld and postworld correctly without issues
+		
+		//secondary instance with same class by special flag and other startup order...
+		
+		
 	}
 	
     public void onEnable()
@@ -87,6 +96,7 @@ public class Loader extends JavaPlugin
     	Bukkit.getPluginManager().registerEvents(new CustomLogin(), this);
     	Bukkit.getPluginManager().registerEvents(new ForcedPvP(), this);
     	Bukkit.getPluginManager().registerEvents(new ForcedRespawn(), this);
+    	Bukkit.getPluginManager().registerEvents(new Tester(), this);
     	//due loading rules, i need both preworld and post world onEnable
     	//callback
     	//must check how to implement such feature

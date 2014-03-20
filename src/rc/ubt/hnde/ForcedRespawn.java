@@ -37,7 +37,7 @@ public class ForcedRespawn implements Listener,Runnable {
 		BukkitScheduler scheduler = Bukkit.getScheduler();
 		scheduler.runTask(Loader.INSTANCE, new ForcedRespawn(e.getPlayer().getName()));
 	}
-	
+
 	public void run() {
 		CraftPlayer CP = (CraftPlayer) Bukkit.getPlayer(target);
 		if (CP == null)
@@ -50,8 +50,8 @@ public class ForcedRespawn implements Listener,Runnable {
 		{
 			return;
 		}
-    	PlayerConnection PC = EP.playerConnection;
-    	PC.player = MinecraftServer.getServer().getPlayerList().moveToWorld(EP, 0, false);
-    	this.target = null;
+		PlayerConnection PC = EP.playerConnection;
+		PC.player = MinecraftServer.getServer().getPlayerList().moveToWorld(EP, 0, false);
+		this.target = null;
 	}
 }

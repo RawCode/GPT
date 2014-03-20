@@ -16,6 +16,14 @@ import sun.reflect.Reflection;
 /**
   * sandbox key for obfuscated stuff -Djava.security.manager
   */
+
+/**TODO 
+ * Generic update to allow more actions on fields and objects without lots of calls
+ * Benchmark testing for hashmap caching and unchached version to get proper results about speed
+ * If cached version faster - move everything to cache.
+ * @author RawCode
+ *
+ */
 @SuppressWarnings("all")
 public class UnsafeImpl //JAVA process IO
 {
@@ -140,8 +148,39 @@ public class UnsafeImpl //JAVA process IO
 	//string have 6 words size
 	//final File f = new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 	
+	
+	static private void putInt(Object Owner, int Value,String... Names)
+	{
+		Field Target = fetchField(Owner.getClass(),Names);
+		if ((Target.getModifiers() & 8) == 0)
+		{
+			unsafe.putInt(Owner,unsafe.objectFieldOffset(Target),Value);
+			return;
+		}
+		unsafe.putInt(Owner.getClass(),unsafe.staticFieldOffset(Target),Value);
+	}
+	
+	static public Object getInt(Object Owner, String... Names)
+	{
+		Field Target = fetchField(Owner.getClass(),Names);
+		if ((Target.getModifiers() & 8) == 0)
+		{
+			return unsafe.getInt(Owner,unsafe.objectFieldOffset(Target));
+		}
+		return unsafe.getInt(Owner.getClass(),unsafe.staticFieldOffset(Target));
+	}
+	
+	static boolean testbool = false;
+	
 	static public void main(String[] args) throws Throwable {
+		
+		System.out.println(testbool);
+		putInt(new UnsafeImpl(),999999,"testbool");
+		System.out.println(testbool);
+		System.out.println(getInt(new UnsafeImpl(),"testbool"));
+		
 
+		/*
 		int[] t = {1,2,3,4};
 		int step = 0;
 		for(;;)

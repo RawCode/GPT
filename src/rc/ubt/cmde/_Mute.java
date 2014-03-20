@@ -21,25 +21,6 @@ public class _Mute implements Listener {
 	//i already can see list of forbidden words and infractions on users
 	
 
-	static Map<String,Wrapper> Registry = new HashMap<String,Wrapper>();
-	static WeakHashMap<Player,String> Chat = new WeakHashMap<Player,String>();
-	
-	private class Wrapper
-	{
-		String Admin;
-		long   Expiration;
-		String Reason;
-		int Options;
-		
-		private Wrapper(String Admin,long Expiration,String Reason,int Options){
-			this.Admin = Admin;
-			this.Expiration = Expiration;
-			this.Reason = Reason;
-			this.Options = Options;
-		}
-		
-	}
-	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void PlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event)  {
 		String[] Data   = event.getMessage().toLowerCase().split("\\s+");
@@ -155,43 +136,6 @@ public class _Mute implements Listener {
 			return;
 		}
 		event.setCancelled(false);
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled = true)
-	public void AsyncPlayerChatEvent(AsyncPlayerChatEvent event)  {
-		
-		String Name = event.getPlayer().getName().toLowerCase();
-		Wrapper w = Registry.get(Name);
-		
-		String last = Chat.get(event.getPlayer());
-		
-		if (last != null)
-			if (last.equalsIgnoreCase(event.getMessage()))
-			{
-				event.setCancelled(true);
-				return;
-			}
-		Chat.put(event.getPlayer(), event.getMessage());
-		
-		if (w == null)return;
-		
-		if (w.Expiration < System.currentTimeMillis())
-		{
-			Registry.remove(Name);
-			Bukkit.getPlayer(w.Admin).sendMessage(ChatColor.RED + "Мут игрока " + Name + " истёк");
-			return;
-		}
-		
-		if (w.Options == 1)
-		{
-			event.getRecipients().clear();
-			event.getRecipients().add(event.getPlayer());
-			return;
-		}
-
-		event.getPlayer().sendMessage(ChatColor.RED + "Вам запрещено использовать чат администратором " 
-		+ w.Admin + " по причине " + w.Reason + " осталось " + (w.Expiration - System.currentTimeMillis()) / 1000 + " секунд");
-		event.setCancelled(true); 
 	}
 	
 }
