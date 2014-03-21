@@ -29,6 +29,7 @@ import rc.ubt.wgen.Generator_DFS;
 @SuppressWarnings("all")
 public class Loader extends JavaPlugin
 {
+	static String VER = Bukkit.getServer().getClass().getName().split("\\.")[3];
 	public static JavaPlugin INSTANCE;
 	{
 		INSTANCE = this;

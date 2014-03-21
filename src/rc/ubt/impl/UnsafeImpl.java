@@ -25,38 +25,23 @@ import sun.reflect.Reflection;
  *
  */
 @SuppressWarnings("all")
-public class UnsafeImpl //JAVA process IO
+public class UnsafeImpl
 {
-	//static String VERSION = Bukkit.getServer().getClass().getName().split("\\.")[3];
-	//large part of work for fields and methods ahead
-	//jilegal will help (probably)
-	//major refactoring required to allow simple and effective syntax
+	/**
+	 * Java process IO
+	 * This class allows to read and write java process memory directly via unsafe natives
+	 * Same stuff already implemented in jillegal but i dont evedrop on it's sources for fun
+	 * 
+	 * Unsafe internally used by Reflections, basically this is reflections with all security and safety removed
+	 * Java objects is API over internal OOPs
+	 * 
+	 * !!!Platform\version dependant!!!
+	 * Tested platform Windows 7 - x64 - CompressedOOPS
+	 */
 	
-	//probably simething with push\pull threadlocal or similar to allow index
-	
-	//link to field
-	//field.set \ field.get
-	//field update
-	
-	//or atomic methods about just setting field or just getting field
-	//or getting and setting field in single run if some property of object need to change
-	//or object needed only to get other object
-	
-	
-	
-	//Reflections are just one big wrapped over Unsafe
-	//Java objects are wrappers over JVM OOPs
-	//Now you know everything required to work with this code
-	
-	//Tested platform Windows 7 - x64 - CompressedOOPS
-	//Profiles for other platforms TBI.
-	
-	//markers for field size detection feature (TBI)
-	static int FA = 0x0000BEEF;
-	static int FB = 0xDEAD0000;
-	static Unsafe unsafe = null;
-	static Object anchor = null;
-	static long   offset = 0l;
+	static Unsafe unsafe;
+	static Object anchor;
+	static long   offset;
 	static
 	{
 		try
@@ -66,8 +51,12 @@ public class UnsafeImpl //JAVA process IO
 			unsafe = (Unsafe) f.get(null);
 			offset = unsafe.staticFieldOffset(fetchField(UnsafeImpl.class,"anchor"));
 			}
-		catch(Throwable t){}
-	};
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			System.exit(1);
+		}
+	}
 	
 	static private int forObject_OOP(Object O){
 		anchor = O;
@@ -84,18 +73,20 @@ public class UnsafeImpl //JAVA process IO
 		return Value & 0xFFFFFFFFL;
 	}
 	
-	static private Field fetchField(Class Source,Class Type,String... Names)
-	{
-		for(;Source != Object.class;Source = Source.getSuperclass())
-		{
-			for (Field f : Source.getDeclaredFields())
-				for (String s : Names)
-					if (f.getName().equals(s) && f.getType() == Type)
-						return f;
-		}
-		return null;
+	static private void forObject_Dump(Object O){
+		System.out.println("Trace of " + Long.toHexString(I2L(forObject_OOP(O))));
+        for (int i = 0; i < 72; i++){
+            	System.out.print(String.format("%02X ", unsafe.getByte(O,(long)i)));
+            	if (i % 4 == 3)
+            		System.out.println();
+        }
+        System.out.println();
 	}
 	
+	//result are extremely easy to cache
+	//we need from field only two params - type (static or not) and offset, nothing more nothing less
+	//this can be cached easy by Source+Name
+	//since currently there is no real need of high perfomance this feature postnoted
 	static private Field fetchField(Class Source,String... Names)
 	{
 		for(;Source != Object.class;Source = Source.getSuperclass())
@@ -107,6 +98,11 @@ public class UnsafeImpl //JAVA process IO
 		}
 		return null;
 	}
+	
+	//primitive cast method for getting stuff from slot
+	
+	//put methods are word and dword
+	
 	
 	static private void putObject(Object Owner, Object Value,String... Names)
 	{
@@ -129,27 +125,7 @@ public class UnsafeImpl //JAVA process IO
 		return unsafe.getObject(Owner.getClass(),unsafe.staticFieldOffset(Target));
 	}
 	
-	static private void forObject_Dump(Object O){
-		System.out.println("Trace of " + Long.toHexString(I2L(forObject_OOP(O))));
-        for (int i = 0; i < 72; i++){
-            	System.out.print(String.format("%02X ", unsafe.getByte(O,(long)i)));
-            	if (i % 4 == 3)
-            		System.out.println();
-        }
-        System.out.println();
-	}
-	
-	//I need complex all in one with caching and other stuff method backed by hashtable or something similar
-	//This method shoud allow me to read and write any field without any additional calls
-	//since memory and calculations footprint not soo heavy, i will need to benchmark hashtable backed version
-	//probably it will be faster to just reseak, then asking hashtable about values
-	
-	//integer have 4 words size
-	//string have 6 words size
-	//final File f = new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-	
-	
-	static private void putInt(Object Owner, int Value,String... Names)
+	public static void putInt(Object Owner, int Value,String... Names)
 	{
 		Field Target = fetchField(Owner.getClass(),Names);
 		if ((Target.getModifiers() & 8) == 0)
@@ -170,16 +146,22 @@ public class UnsafeImpl //JAVA process IO
 		return unsafe.getInt(Owner.getClass(),unsafe.staticFieldOffset(Target));
 	}
 	
-	static boolean testbool = false;
+
+	
+	//I need complex all in one with caching and other stuff method backed by hashtable or something similar
+	//This method shoud allow me to read and write any field without any additional calls
+	//since memory and calculations footprint not soo heavy, i will need to benchmark hashtable backed version
+	//probably it will be faster to just reseak, then asking hashtable about values
+	
+	//integer have 4 words size
+	//string have 6 words size
+	//final File f = new File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+	
+	
+
 	
 	static public void main(String[] args) throws Throwable {
 		
-		System.out.println(testbool);
-		putInt(new UnsafeImpl(),999999,"testbool");
-		System.out.println(testbool);
-		System.out.println(getInt(new UnsafeImpl(),"testbool"));
-		
-
 		/*
 		int[] t = {1,2,3,4};
 		int step = 0;
@@ -191,34 +173,7 @@ public class UnsafeImpl //JAVA process IO
 			if (step++ == t.length-1)break;
 		}
 		/*
-		final Thread a = new Thread(){
-			public void run(){
-				while(true)
-				{
-					unsafe.monitorEnter(lock);
-					AsyncField++;
-					unsafe.monitorExit(lock);
-					//you insert conditional parking into sections of code that
-					//may cause issues with other concurrent code
-				}
-			}
-		};
 		
-		final Thread b = new Thread(){
-			public void run(){
-				while(true)
-				{
-					unsafe.monitorEnter(lock);
-					System.out.println(AsyncField);
-					System.out.println(AsyncField);
-					unsafe.monitorExit(lock);
-					try{Thread.sleep(1000);}catch(Exception e){};
-				}
-			}
-		};
-		
-		a.start();
-		b.start();
 		
 		/*
 		Object S1 = new Integer(0xAAAAAAAA);
