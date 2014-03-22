@@ -156,9 +156,18 @@ public class Populator_DFS extends BlockPopulator
         }
     }
     
+    
+    
+    
+    //EFFECTIVE load shoud not exceed source chunk and adjucent chunks
+    //NEVER
+    //This allows to roll from -15 to 15 in most cases
+    //if object expected to be large, it shoud be rare to prevent chainloading
+    //or have special condition to work
     public void populate(World w, Random random, Chunk source) {
     	int X = source.getX();
     	int Z = source.getZ();
+    	
 		RND.setSeed((long)(X)*341873128712L + (long)(Z)*132897987541L);
     	double R = (SimplexImpl.noise(X*SCALE, Z*SCALE)+1.0d)*2;
     	X *= 16;

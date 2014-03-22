@@ -68,6 +68,10 @@ public class Generator_DFS extends ChunkGenerator {
 		//DONT
 		
 		short[][]  output    = new short [16][  ];
+		
+		if (true)
+			return output;
+		
 		double[][] heightmap = new double[16][16];
 		
 		output[0] = new short[4096];

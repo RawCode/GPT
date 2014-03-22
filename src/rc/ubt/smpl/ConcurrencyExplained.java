@@ -2,6 +2,7 @@ package rc.ubt.smpl;
 
 public class ConcurrencyExplained
 {
+	//Remote Fetch URL	https://github.com/RawCode/GPT.git
 	public static long AsyncField = 0xBA1l;
 	public static Object lock = new Object();
 	

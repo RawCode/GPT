@@ -9,6 +9,9 @@ import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 
 import rc.ubt.impl.UnsafeImpl;
 
@@ -21,24 +24,24 @@ public class Tester implements Listener
 	//Tester class unlike all other classes can be defined on it's own
 	//in my case i will load directly from workspace
 	@EventHandler()
-	public void OnChat(AsyncPlayerChatEvent tt)
+	public void OnChunkLoadEvent(ChunkLoadEvent e)
 	{
-		CraftItemStack tz = (CraftItemStack) tt.getPlayer().getItemInHand();
-		if (tz == null)return;
-		net.minecraft.server.v1_7_R1.ItemStack handle = (net.minecraft.server.v1_7_R1.ItemStack) UnsafeImpl.getObject(tz, "handle");
-		
-		handle.setTag(new NBTTagCompound());
-		
-		NBTTagList ttz = new NBTTagList();
-		NBTTagCompound data = new NBTTagCompound();
-		
-		data.setByte("Id", (byte) 2);
-		data.setByte("Amplifier", (byte) 1);
-		data.setInt("Duration", 1);
-		data.setBoolean("Ambient", true);
-        
-		ttz.add(data);
-		handle.tag.set("CustomPotionEffects", ttz);
+		System.out.println("LOAD " + e.getChunk() + "--" + e.isNewChunk());
+		//i want to know who loaded this chunk and who supports it
+	}
+	
+	@EventHandler()
+	public void OnChunkPopulateEvent(ChunkPopulateEvent e)
+	{
+		System.out.println("POPULATE " + e.getChunk());
+		//i want to know who caused chunk population
+	}
+	
+	@EventHandler()
+	public void OnChunkUnloadEvent(ChunkUnloadEvent e)
+	{
+		System.out.println("UNLOAD " + e.getChunk());
+		//i want to know who was last player in unloaded chunk
 	}
 }
 
